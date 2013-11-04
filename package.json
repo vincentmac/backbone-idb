@@ -39,5 +39,16 @@
   },
   "scripts": {
     "test": "make test"
+  },
+  "testling": {
+    "files": "test/*.js",
+    "harness": "mocha",
+    "browsers": {
+      "chrome": [30, 31, 32],
+      "firefox": [24, 25],
+      "ie": [9, 10],
+      "opera": [17],
+      "safari": [6, 7]
+    }
   }
 }
