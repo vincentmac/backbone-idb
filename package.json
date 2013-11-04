@@ -44,11 +44,13 @@
     "files": "test/*.js",
     "harness": "mocha",
     "browsers": {
-      "chrome": [30, 31, 32],
-      "firefox": [24, 25],
+      "chrome": [29, "canary"],
+      "firefox": [24, "nightly"],
       "ie": [9, 10],
-      "opera": [17],
-      "safari": [6, 7]
+      "iphone": [6.0],
+      "ipad": [6.0],
+      "opera": [15, "next"],
+      "safari": [5.1, 6.0]
     }
   }
 }
