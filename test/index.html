@@ -3,15 +3,18 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <title>Mocha Spec Runner</title>
-  <link rel="stylesheet" href="mocha/mocha.css">
+  <link rel="stylesheet" href="../node_modules/mocha/mocha.css">
 </head>
 <body>
   <div id="mocha"></div>
-  <script src="mocha/mocha.js"></script>
+  <script src="../node_modules/lodash/dist/lodash.js"></script>
+  <script src="../node_modules/backbone/backbone.js"></script>
+  <script src="../node_modules/idb-wrapper/idbstore.js"></script>
+  <script src="../node_modules/mocha/mocha.js"></script>
   <script>mocha.setup('bdd');</script>
   <script>mocha.globals(['LiveReload', 'css', 'cssFile', 'cssRule'])</script>
   <!-- assertion framework -->
-  <script src="should/should.js"></script>
+  <script src="../node_modules/should/should.js"></script>
 
   <script>
       // var expect = chai.expect;
@@ -20,12 +23,17 @@
   </script>
   
   <!-- include source files here... -->
+  <script src="../backbone-idb.js"></script>
 
 
   <!-- include spec files here... -->
   <!-- <script src="spec/test.js"></script> -->
   <script src="test.js"></script>
 
-  <script>mocha.run()</script>
+  <script>
+    mocha.run();
+    // var delDB = window.indexedDB.deleteDatabase('store');
+
+  </script>
 </body>
 </html>

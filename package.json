@@ -22,20 +22,23 @@
     "sync",
     "websql"
   ],
-  "dependencies": {},
+  "dependencies": {
+    "idb-wrapper": "~1.4.1"
+  },
   "devDependencies": {
     "backbone": "~1.1.0",
-    "grunt": "~0.4.1",
-    "grunt-concurrent": "~0.4.1",
+    "grunt": "~0.4.2",
+    "grunt-concurrent": "~0.4.2",
     "grunt-contrib-clean": "~0.5.0",
     "grunt-contrib-connect": "~0.5.0",
-    "grunt-contrib-jshint": "~0.7.1",
+    "grunt-contrib-jshint": "~0.7.2",
     "grunt-contrib-watch": "~0.5.3",
-    "grunt-mocha": "~0.4.1",
-    "load-grunt-tasks": "~0.2.0",
-    "jquery": "~1.8.3",
-    "mocha": "~1.13.0",
-    "should": "~2.0.2"
+    "grunt-mocha": "~0.4.7",
+    "load-grunt-tasks": "~0.2.1",
+    "lodash": "~2.4.1",
+    "jquery": "latest",
+    "mocha": "~1.16.2",
+    "should": "~2.1.1"
   },
   "scripts": {
     "test": "make test"
@@ -44,13 +47,32 @@
     "files": "test/*.js",
     "harness": "mocha",
     "browsers": {
-      "chrome": [29, "canary"],
-      "firefox": [24, "nightly"],
-      "ie": [9, 10],
-      "iphone": [6.0],
-      "ipad": [6.0],
-      "opera": [15, "next"],
-      "safari": [5.1, 6.0]
+      "chrome": [
+        29,
+        "canary"
+      ],
+      "firefox": [
+        24,
+        "nightly"
+      ],
+      "ie": [
+        9,
+        10
+      ],
+      "iphone": [
+        6
+      ],
+      "ipad": [
+        6
+      ],
+      "opera": [
+        15,
+        "next"
+      ],
+      "safari": [
+        5.1,
+        6
+      ]
     }
   }
 }

@@ -10,7 +10,7 @@ module.exports = function(grunt) {
     watch:{
       mocha: {
         // files: ['<%= yeoman.app %>/scripts/main.js'],
-        files: ['test/{,*/}*.js'],
+        files: ['test/{,*/}*.js', 'backbone-idb.js'],
         tasks: ['mocha']
       },
       livereload: {
@@ -18,7 +18,8 @@ module.exports = function(grunt) {
           livereload: '<%= connect.options.livereload %>'
         },
         files: [
-          '{,.tmp/}test/{,*/}*.js'
+          '{,.tmp/}test/{,*/}*.js',
+          'backbone-idb.js'
         ]
       }
     },
@@ -45,7 +46,8 @@ module.exports = function(grunt) {
           open: true,
           base: [
             'test',
-            'node_modules'
+            'node_modules',
+            './'
           ]
         }
       }
@@ -67,6 +69,7 @@ module.exports = function(grunt) {
       },
       all: [
         'Gruntfile.js',
+        // 'backbone-idb.js',
         'test/{,*/}*.js'
       ]
     },
@@ -76,11 +79,12 @@ module.exports = function(grunt) {
         options: {
           run: true,
           reporter: 'Spec',
+          log: true,
           bail: false,
           mocha: {
             ignoreLeaks: true
           },
-          urls: ['http://<%= connect.test.options.hostname %>:<%= connect.test.options.port %>/index.html']
+          urls: ['http://<%= connect.test.options.hostname %>:<%= connect.test.options.port %>/test/index.html']
         }
       }
     },
@@ -95,6 +99,7 @@ module.exports = function(grunt) {
   });
 
   grunt.registerTask('test', [
+    'jshint',
     'connect:test',
     'mocha',
     'watch'
