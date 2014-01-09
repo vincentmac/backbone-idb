@@ -14,7 +14,7 @@
     // CommonJS Module - Register as a CommonJS Module 
     module.exports = factory(require('underscore'), require('backbone'), require('idb-wrapper'), 'CommonJS');
   } else if (typeof define === 'function' && define.amd) {
-    // AMD - Register as an anonymouse module
+    // AMD - Register as an anonymous module
     define(['underscore', 'backbone'], function(_, Backbone) {
       return factory(_ || global._, Backbone || global.Backbone, IDBStore || global.IDBStore, 'AMD');
     });
@@ -34,130 +34,148 @@
   //   return (S4()+S4()+"-"+S4()+"-"+S4()+"-"+S4()+"-"+S4()+S4()+S4());
   // }
 
-  var defaultReadyHandler = function () {
-    console.log('idb:ready this:', this);
-    Backbone.trigger('idb:ready', this);
-  };
+  Backbone.IndexedDB = function IndexedDB(options, parent) {
+    var that = this;
+    this.parent = parent;  // reference to the model or collection
 
-  var defaultErrorHandler = function (error) {
-    throw error;
-  };
+    var defaultReadyHandler = function () {
+      // console.log('idb:ready this:', this);  // <IDBStore>
+      // console.log('idb:ready that:', that);  // <IndexedDB>
+      
+      // By default, make the Backbone.IndexedDB available through `parent.idbStore`
+      that.parent.idbStore = that;
+      // Fire ready event on parent model or collection
+      that.parent.trigger('idb:ready', that);
+    };
 
-  var defaults = {
-    storeName: 'Store',
-    storePrefix: '',
-    dbVersion: 1,
-    keyPath: 'id',
-    autoIncrement: true,
-    onStoreReady: defaultReadyHandler,
-    onError: defaultErrorHandler,
-    indexes: []
-  };
+    var defaultErrorHandler = function (error) {
+      throw error;
+    };
 
-  Backbone.IndexedDB = function IndexedDB(options) {
-    // this.name = name;
-    // console.log(method);
+    var defaults = {
+      storeName: 'Store',
+      storePrefix: '',
+      dbVersion: 1,
+      keyPath: 'id',
+      autoIncrement: true,
+      onStoreReady: defaultReadyHandler,
+      onError: defaultErrorHandler,
+      indexes: []
+    };
 
     options = _.defaults(options || {}, defaults);
     this.dbName = options.storePrefix + options.storeName;
     this.store = new IDBStore(options);
 
-    // this.store = new IDBStore({
-    //   dbVersion: options.dbVersion || 1,
-    //   storePrefix: options.storePrefix || '',
-    //   storeName: options.storeName || 'store',
-    //   keyPath: options.keyPath || 'id',
-    //   autoIncrement: options.autoIncrement || true,
-    //   indexes: options.indexes || [],
-    //   onStoreReady: options.onStoreReady || function() {
-    //     Backbone.trigger('idb:ready');
-    //   }
-    // });
-    
-    // console.log('idbstore', IDBStore());
-
-    // this.dbName;
-    // this.storeName;
-    // this.db;
-    // this.store;
-    // this.dbVersion
-
-    // // Set defaults with overrides
-    // for (var key in defaults) {
-    //   this[key] = typeof options[key] !== 'undefined' ? options[key] : defaults[key];
-    // }
-
-    // var env = typeof window == 'object' ? window : self;
-    // this.idb = env.indexedDB || env.webkitIndexedDB || env.mozIndexedDB;
-    // this.keyRange = env.IDBKeyRange || env.webkitIDBKeyRange || env.mozIDBKeyRange;
-
-    // this.features = {
-    //   hasAutoIncrement: !env.mozIndexedDB
-    // };
-    // this.openDB();
   };
 
   _.extend(Backbone.IndexedDB.prototype, {
 
-    // Save the current state of the model 
-    // save: function() {
-    //   console.log('save via backbone-idb');
-    // },
-
+    /**
+     * Add a new model to the store
+     *
+     * @param {Backbone.Model} model - Backbone model to add to store
+     * @param {Object} options - sync options created by Backbone
+     * @param {Function} [options.success] - overridable success callback 
+     * @param {Function} [options.error] - overridable error callback
+     */
     create: function(model, options) {
       // console.log('create via backbone-idb', options.success());
-      console.log('create via backbone-idb', model.attributes);
-      console.log('create via backbone-idb', model.toJSON());
+      // console.log('create via backbone-idb', model.attributes);
       this.store.put(_.clone(model.attributes), options.success, options.error);
 
     },
 
+    /**
+     *
+     * @param {Backbone.Model} model - Backbone model to update and save to store
+     * @param {Object} options - sync options created by Backbone
+     * @param {Function} [options.success] - overridable success callback 
+     * @param {Function} [options.error] - overridable error callback
+     */
     update: function(model, options) {
-      console.log('update via backbone-idb');
+      // console.log('update via backbone-idb');
+      this.store.put(_.clone(model.attributes), options.success, options.error);
     },
 
-    get: function(model, options) {
-      console.log('get via backbone-idb');
+    /**
+     *
+     * @param {Backbone.Model} model - Backbone model to get from store
+     * @param {Object} options - sync options created by Backbone
+     * @param {Function} [options.success] - overridable success callback 
+     * @param {Function} [options.error] - overridable error callback
+     */
+    read: function(model, options) {
+      // console.log('get via backbone-idb');
+      this.store.get(model.id, options.success, options.error);
     },
 
+    /**
+     *
+     * @param {Object} options - sync options created by Backbone
+     * @param {Function} [options.success] - overridable success callback 
+     * @param {Function} [options.error] - overridable error callback
+     */
     findAll: function(options) {
 
     },
 
+    /**
+     *
+     * @param {Backbone.Model} model - Backbone model to delete from store
+     * @param {Object} options - sync options created by Backbone
+     * @param {Function} [options.success] - overridable success callback 
+     * @param {Function} [options.error] - overridable error callback
+     */
     destroy: function(model, options) {
       if (model.isNew()) {
         return false;
       }
-      console.log('destroy via backbone-idb');
+      // console.log('destroy via backbone-idb');
+      this.store.remove(model.id, options.success, options.error);
+    },
+
+    /**
+     * Clears all content the current indexedDB for this collection/model
+     *
+     * @param {Function} [onSuccess] - success callback 
+     * @param {Function} [onError] - error callback
+     */
+    clear: function(onSuccess, onError) {
+      if (typeof onSuccess !== 'function') {
+        onSuccess = function onSuccess() {};
+      }
+      if (typeof onError !== 'function') {
+        onError = function onError(err) {
+          throw err;
+        };
+      }
+      this.store.clear(onSuccess, onError);
+    },
+
+    /**
+     * Deletes the current indexedDB for this collection/model
+     */
+    deleteDatabase: function() {
+      this.store.deleteDatabase();
     }
 
   });
 
 
-  // Backbone.IndexedDB.deleteDatabase = function(name) {
-  //   var env = typeof window == 'object' ? window : self;
-  //   var idb = env.indexedDB || env.webkitIndexedDB || env.mozIndexedDB;
-  //   // console.log('deleteDatabase', name);
-  //   if (idb) {
-  //     idb.deleteDatabase(name);
-  //   }
-  // };
 
   Backbone.IndexedDB.sync = Backbone.idbSync = function(method, model, options) {
     var db = model.indexedDB || model.collection.indexedDB;
 
-    var resp, error;
-    console.log('Backbone.IndexedDB.sync', method, model, options);
-
-    // if (method === 'create') {
-    //   db.save();
-    // }
+    // var resp, error;
+    // console.log('Backbone.IndexedDB.sync', method, model, options);
+    // console.log('Backbone.IndexedDB.sync', method);
 
     switch (method) {
       case 'read':
-        console.log('fetch', model.id);
-        model.id !== undefined ? db.find(model, options) : db.findAll(options);
+        model.id !== undefined ? db.read(model, options) : db.findAll(options);
         break;
+
       case 'create':
         if (model.id) {
           db.update(model, options);
@@ -165,9 +183,22 @@
           db.create(model, options);
         }
         break;
+
+      case 'update':
+        if (model.id) {
+          db.update(model, options);
+        } else {
+          db.create(model, options);
+        }
+        break;
+      case 'delete':
+        if (model.id) {
+          db.destroy(model, options);
+        }
+        break;
     }
-    resp;
-    error;
+    // resp;
+    // error;
 
   };
 
