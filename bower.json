@@ -1,0 +1,32 @@
+{
+  "name": "backbone-idb",
+  "version": "0.1.0",
+  "description": "Backbone IndexedDB adapter with cross browser support via IDBWrapper",
+  "license": "MIT",
+  "author": {
+    "name": "Vincent Mac",
+    "email": "vincent@simplicity.io",
+    "url": "http://simplicity.io"
+  },
+  "main": "backbone-idb.js",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/vincentmac/backbone-idb.git"
+  },
+  "homepage": "http://github.com/vincentmac/backbone-idb",
+  "keywords": [
+    "backbone",
+    "indexeddb",
+    "idbwrapper",
+    "localstorage",
+    "sync",
+    "websql"
+  ],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
