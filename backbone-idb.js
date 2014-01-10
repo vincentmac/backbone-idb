@@ -1,14 +1,14 @@
 /**
  * @license
  * Backbone IndexedDB Adapter
- * Version 0.0.1
- * Copyright (c) 2013 Vincent Mac
+ * Version 0.2.1
+ * Copyright (c) 2013-2014 Vincent Mac
  *
  * Available under MIT license <https://raw.github.com/vincentmac/backbone-idb/master/LICENSE>
  *
  * http://github.com/vincentmac/backbone-idb
  */
-(function (global, factory) {
+;(function (global, factory) {
   'use strict';
   if (typeof exports === 'object' && typeof require === 'function') {
     // CommonJS Module - Register as a CommonJS Module 
@@ -70,6 +70,13 @@
   };
 
   _.extend(Backbone.IndexedDB.prototype, {
+
+    /**
+     * The version of Backbone.IndexedDB
+     *
+     * @type String
+     */
+    version: '0.2.1',
 
     /**
      * Add a new model to the store

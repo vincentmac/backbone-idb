@@ -1,6 +1,6 @@
 {
   "name": "backbone-idb",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Backbone IndexedDB adapter with cross browser support via IDBWrapper",
   "license": "MIT",
   "author": {
@@ -22,11 +22,20 @@
     "sync",
     "websql"
   ],
+  "dependencies": {
+    "lodash": "~2.4.1",
+    "backbone": "~1.1.0",
+    "idb-wrapper": "~1.4.1"
+  },
   "ignore": [
-    "**/.*",
     "node_modules",
     "bower_components",
     "test",
-    "tests"
+    "tests",
+    "**/.*",
+    "Gruntfile.js",
+    "index.js",
+    "Makefile",
+    "package.json"
   ]
 }

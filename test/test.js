@@ -1,4 +1,4 @@
-/* jshint expr: true */
+/* jshint expr:true, unused:false */
 /* global describe, it, before, after, Backbone, _*/
 'use strict';
 // if (typeof exports === 'object' && typeof require === 'function') {
