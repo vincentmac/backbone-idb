@@ -80,13 +80,14 @@
      * @param {Function} [options.error] - overridable error callback
      */
     create: function(model, options) {
-      // console.log('create via backbone-idb', options.success());
       // console.log('create via backbone-idb', model.attributes);
-      this.store.put(_.clone(model.attributes), options.success, options.error);
+      // this.store.put(_.clone(model.attributes), options.success, options.error);
+      this.store.put(model.attributes, options.success, options.error);
 
     },
 
     /**
+     * Update a model in the store
      *
      * @param {Backbone.Model} model - Backbone model to update and save to store
      * @param {Object} options - sync options created by Backbone
@@ -95,10 +96,12 @@
      */
     update: function(model, options) {
       // console.log('update via backbone-idb');
-      this.store.put(_.clone(model.attributes), options.success, options.error);
+      // this.store.put(_.clone(model.attributes), options.success, options.error);
+      this.store.put(model.attributes, options.success, options.error);
     },
 
     /**
+     * Retrieve a model from the store
      *
      * @param {Backbone.Model} model - Backbone model to get from store
      * @param {Object} options - sync options created by Backbone
@@ -111,16 +114,18 @@
     },
 
     /**
+     * Retrieve a collection from the store
      *
      * @param {Object} options - sync options created by Backbone
      * @param {Function} [options.success] - overridable success callback 
      * @param {Function} [options.error] - overridable error callback
      */
-    findAll: function(options) {
-
+    getAll: function(options) {
+      this.store.getAll(options.success, options.error);
     },
 
     /**
+     * Delete a model from the store
      *
      * @param {Backbone.Model} model - Backbone model to delete from store
      * @param {Object} options - sync options created by Backbone
@@ -136,7 +141,58 @@
     },
 
     /**
-     * Clears all content the current indexedDB for this collection/model
+     * Iterates over the store using the given options and calling onItem
+     * for each entry matching the options.
+     *
+     * @param {Function} onItem - A callback to be called for each match
+     * @param {Object} [options] - An object defining specific options
+     * @param {Object} [options.index=null] - An IDBIndex to operate on
+     * @param {String} [options.order=ASC] - The order in which to provide the
+     *  results, can be 'DESC' or 'ASC'
+     * @param {Boolean} [options.autoContinue=true] - Whether to automatically
+     *  iterate the cursor to the next result
+     * @param {Boolean} [options.filterDuplicates=false] - Whether to exclude
+     *  duplicate matches
+     * @param {Object} [options.keyRange=null] - An IDBKeyRange to use
+     * @param {Boolean} [options.writeAccess=false] - Whether grant write access
+     *  to the store in the onItem callback
+     * @param {Function} [options.onEnd=null] - A callback to be called after
+     *  iteration has ended
+     * @param {Function} [options.onError=throw] - A callback to be called
+     *  if an error occurred during the operation.
+     */
+    iterate: function(onItem, options) {
+      if (options.keyRange && !(options.keyRange instanceof global.IDBKeyRange)) {
+        options.keyRange = this.makeKeyRange(options.keyRange);
+      }
+
+      this.store.iterate(onItem, options);
+    },
+
+    /**
+     * Creates a key range using specified options. This key range can be
+     * handed over to the count() and iterate() methods.
+     *
+     * Note: You must provide at least one or both of "lower" or "upper" value.
+     *
+     * @param {Object} options The options for the key range to create
+     * @param {*} [options.lower] The lower bound
+     * @param {Boolean} [options.excludeLower] Whether to exclude the lower
+     *  bound passed in options.lower from the key range
+     * @param {*} [options.upper] The upper bound
+     * @param {Boolean} [options.excludeUpper] Whether to exclude the upper
+     *  bound passed in options.upper from the key range
+     * @param {*} [options.only] A single key value. Use this if you need a key
+     *  range that only includes one value for a key. Providing this
+     *  property invalidates all other properties.
+     * @return {Object} The IDBKeyRange representing the specified options
+     */
+    makeKeyRange: function(options) {
+      return this.store.makeKeyRange(options);
+    },
+
+    /**
+     * Clears all content from the current indexedDB for this collection/model
      *
      * @param {Function} [onSuccess] - success callback 
      * @param {Function} [onError] - error callback
@@ -163,17 +219,21 @@
   });
 
 
-
+  /**
+   * Backbone.sync drop-in replacement
+   *
+   * This function replaces the model or collection's sync method and remains
+   * compliant with Backbone's api.
+   */
   Backbone.IndexedDB.sync = Backbone.idbSync = function(method, model, options) {
     var db = model.indexedDB || model.collection.indexedDB;
-
-    // var resp, error;
     // console.log('Backbone.IndexedDB.sync', method, model, options);
-    // console.log('Backbone.IndexedDB.sync', method);
 
     switch (method) {
+
+      // Retrieve an individual model or entire collection from indexedDB
       case 'read':
-        model.id !== undefined ? db.read(model, options) : db.findAll(options);
+        model.id !== undefined ? db.read(model, options) : db.getAll(options);
         break;
 
       case 'create':
@@ -191,14 +251,13 @@
           db.create(model, options);
         }
         break;
+
       case 'delete':
         if (model.id) {
           db.destroy(model, options);
         }
         break;
     }
-    // resp;
-    // error;
 
   };
 
