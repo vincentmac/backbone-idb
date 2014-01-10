@@ -1,7 +1,7 @@
 /**
  * @license
  * Backbone IndexedDB Adapter
- * Version 0.2.1
+ * Version 0.2.2
  * Copyright (c) 2013-2014 Vincent Mac
  *
  * Available under MIT license <https://raw.github.com/vincentmac/backbone-idb/master/LICENSE>
@@ -76,7 +76,7 @@
      *
      * @type String
      */
-    version: '0.2.1',
+    version: '0.2.2',
 
     /**
      * Add a new model to the store
