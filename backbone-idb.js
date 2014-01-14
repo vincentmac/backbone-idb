@@ -1,7 +1,7 @@
 /**
  * @license
  * Backbone IndexedDB Adapter
- * Version 0.2.3
+ * Version 0.2.4
  * Copyright (c) 2013-2014 Vincent Mac
  *
  * Available under MIT license <https://raw.github.com/vincentmac/backbone-idb/master/LICENSE>
@@ -33,6 +33,13 @@
   // function guid() {
   //   return (S4()+S4()+"-"+S4()+"-"+S4()+"-"+S4()+"-"+S4()+S4()+S4());
   // }
+  var defaultErrorHandler = function (error) {
+    throw error;
+  };
+
+  var noop = function () {
+  };
+
 
   Backbone.IndexedDB = function IndexedDB(options, parent) {
     var that = this;
@@ -46,10 +53,6 @@
       that.parent.idbStore = that;
       // Fire ready event on parent model or collection
       that.parent.trigger('idb:ready', that);
-    };
-
-    var defaultErrorHandler = function (error) {
-      throw error;
     };
 
     var defaults = {
@@ -69,14 +72,15 @@
 
   };
 
-  _.extend(Backbone.IndexedDB.prototype, {
+  // _.extend(Backbone.IndexedDB.prototype, {
+  Backbone.IndexedDB.prototype = {
 
     /**
      * The version of Backbone.IndexedDB
      *
      * @type String
      */
-    version: '0.2.3',
+    version: '0.2.4',
 
     /**
      * Add a new model to the store
@@ -87,8 +91,6 @@
      * @param {Function} [options.error] - overridable error callback
      */
     create: function(model, options) {
-      // console.log('create via backbone-idb', model.attributes);
-      // this.store.put(_.clone(model.attributes), options.success, options.error);
       this.store.put(model.attributes, options.success, options.error);
 
     },
@@ -102,8 +104,6 @@
      * @param {Function} [options.error] - overridable error callback
      */
     update: function(model, options) {
-      // console.log('update via backbone-idb');
-      // this.store.put(_.clone(model.attributes), options.success, options.error);
       this.store.put(model.attributes, options.success, options.error);
     },
 
@@ -116,7 +116,6 @@
      * @param {Function} [options.error] - overridable error callback
      */
     read: function(model, options) {
-      // console.log('get via backbone-idb');
       this.store.get(model.id, options.success, options.error);
     },
 
@@ -143,7 +142,7 @@
       if (model.isNew()) {
         return false;
       }
-      // console.log('destroy via backbone-idb');
+
       this.store.remove(model.id, options.success, options.error);
     },
 
@@ -199,20 +198,74 @@
     },
 
     /**
+     * Perform a batch operation to save all models in the current collection to indexedDB.
+     *
+     * @param {Function} [onSuccess] - success callback 
+     * @param {Function} [onError] - error callback
+     */
+    saveAll: function(onSuccess, onError) {
+      onSuccess || (onSuccess = noop);
+      onError || (onError = defaultErrorHandler);
+
+      this.store.putBatch(this.parent.toJSON(), onSuccess, onError);
+    },
+
+    /**
+     * Perform a batch operation to save and/or remove models in the current collection to
+     * indexedDB. This is a proxy to the idbstore `batch` method
+     *
+     * @param {Array} dataArray - Array of objects containing the operation to run and
+     *  the model (for put operations).
+     * @param {Function} [onSuccess] - success callback 
+     * @param {Function} [onError] - error callback
+     */
+    batch: function(dataArray, onSuccess, onError) {
+      onSuccess || (onSuccess = noop);
+      onError || (onError = defaultErrorHandler);
+
+      this.store.batch(dataArray, onSuccess, onError);
+    },
+
+    /**
+     * Perform a batch put operation to save models to indexedDB. This is a 
+     * proxy to the idbstore `putBatch` method
+     *
+     * @param {Array} dataArray - Array of models (in JSON) to store
+     * @param {Function} [onSuccess] - success callback 
+     * @param {Function} [onError] - error callback
+     */
+    putBatch: function(dataArray, onSuccess, onError) {
+      onSuccess || (onSuccess = noop);
+      onError || (onError = defaultErrorHandler);
+
+      this.store.putBatch(dataArray, onSuccess, onError);
+    },
+
+    /**
+     * Perform a batch operation to remove models from indexedDB. This is a 
+     * proxy to the idbstore `removeBtch` method
+     *
+     * @param {Array} keyArray - keyArray An array of keys to remove
+     * @param {Function} [onSuccess] - success callback 
+     * @param {Function} [onError] - error callback
+     */
+    removeBatch: function(keyArray, onSuccess, onError) {
+      onSuccess || (onSuccess = noop);
+      onError || (onError = defaultErrorHandler);
+
+      this.store.removeBatch(keyArray, onSuccess, onError);
+    },
+
+    /**
      * Clears all content from the current indexedDB for this collection/model
      *
      * @param {Function} [onSuccess] - success callback 
      * @param {Function} [onError] - error callback
      */
     clear: function(onSuccess, onError) {
-      if (typeof onSuccess !== 'function') {
-        onSuccess = function onSuccess() {};
-      }
-      if (typeof onError !== 'function') {
-        onError = function onError(err) {
-          throw err;
-        };
-      }
+      onSuccess || (onSuccess = noop);
+      onError || (onError = defaultErrorHandler);
+
       this.store.clear(onSuccess, onError);
     },
 
@@ -223,7 +276,8 @@
       this.store.deleteDatabase();
     }
 
-  });
+  // });
+  };
 
 
   /**
@@ -284,6 +338,8 @@
   Backbone.sync = function(method, model, options) {
     return Backbone.getSyncMethod(model).apply(this, [method, model, options]);
   };
+
+  Backbone.IndexedDB.version = Backbone.IndexedDB.prototype.version;
 
   return Backbone.IndexedDB;
 }));

@@ -340,7 +340,7 @@ describe('Working with a Backbone Collection', function () {
      * @param {Object} transaction - IDBTransaction
      */
     function onItem(dataItem, cursor, transaction) {
-      // console.log('dataItem', dataItem);
+      console.log('dataItem', dataItem);
     }
 
     function onEnd() {
@@ -496,6 +496,20 @@ describe('Working with a Backbone Collection', function () {
   });
 
   it('should be able to do batch operations', function (done) {
+    if (window.PHANTOMJS) {
+      return done();
+    }
+    function onSuccess(success) {
+      success.should.be.true;
+      done();
+    }
+
+    function onError(err) {
+      console.log('err', err);
+    }
+
+    // this.notes.idbStore.saveAll(onSuccess, onError);
+    this.notes.idbStore.saveAll(onSuccess);
     done();
   });
 
