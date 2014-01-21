@@ -51,9 +51,7 @@ var TestModel = Backbone.Model.extend({
       //   // that.trigger('indexedDB:ready', this);
       // }
     }, this);
-  },
-
-  idbStore: null
+  }
 });
 
 describe('Working with a Backbone Model', function () {
@@ -92,7 +90,7 @@ describe('Working with a Backbone Model', function () {
     //   done();
     // });
 
-    this.model.idbStore.deleteDatabase();
+    this.model.indexedDB.deleteDatabase();
     done();
   });
 
@@ -185,8 +183,6 @@ var Notes = Backbone.Collection.extend({
     }, this);
   },
 
-  idbStore: null,
-
   model: Note
 
 });
@@ -209,7 +205,7 @@ describe('Working with a Backbone Collection', function () {
     if (window.PHANTOMJS) {
       return done();
     }
-    this.notes.idbStore.deleteDatabase();
+    this.notes.indexedDB.deleteDatabase();
     done();
   });
 
@@ -217,8 +213,8 @@ describe('Working with a Backbone Collection', function () {
     if (window.PHANTOMJS) {
       return done();
     }
-    // console.log('notes collection name =', this.notes.idbStore.dbName);
-    (this.notes.idbStore.dbName).should.equal('notes');
+    // console.log('notes collection name =', this.notes.indexedDB.dbName);
+    (this.notes.indexedDB.dbName).should.equal('notes');
 
     done();
   });
@@ -325,7 +321,7 @@ describe('Working with a Backbone Collection', function () {
       // onError: onErrorCallback
     };
 
-    this.notes.idbStore.iterate(onItem, options);
+    this.notes.indexedDB.iterate(onItem, options);
     // done();
   });
 
@@ -358,7 +354,7 @@ describe('Working with a Backbone Collection', function () {
       // onError: onErrorCallback
     };
 
-    this.notes.idbStore.iterate(onItem, options);
+    this.notes.indexedDB.iterate(onItem, options);
     // done();
   });
 
@@ -374,7 +370,7 @@ describe('Working with a Backbone Collection', function () {
       excludeUpper: true
     };
 
-    var keyrange = this.notes.idbStore.makeKeyRange(options);
+    var keyrange = this.notes.indexedDB.makeKeyRange(options);
     // console.log(keyrange.constructor);
     // console.log(keyrange);
     keyrange.should.be.an.instanceof(window.IDBKeyRange);
@@ -400,7 +396,7 @@ describe('Working with a Backbone Collection', function () {
       done();
     }
 
-    var keyRange = this.notes.idbStore.makeKeyRange({
+    var keyRange = this.notes.indexedDB.makeKeyRange({
       lower: 'a',
       excludeLower: false,
       upper: 't',
@@ -417,7 +413,7 @@ describe('Working with a Backbone Collection', function () {
       // onError: onErrorCallback
     };
 
-    this.notes.idbStore.iterate(onItem, options);
+    this.notes.indexedDB.iterate(onItem, options);
   });
 
   it('should be able to iterate over store and convert a keyRange object to IDBKeyRange', function (done) {
@@ -454,7 +450,7 @@ describe('Working with a Backbone Collection', function () {
       // onError: onErrorCallback
     };
 
-    this.notes.idbStore.iterate(onItem, options);
+    this.notes.indexedDB.iterate(onItem, options);
   });
 
   it('should be able to iterate over store and retrieve item by index value', function (done) {
@@ -492,7 +488,7 @@ describe('Working with a Backbone Collection', function () {
       // onError: onErrorCallback
     };
 
-    this.notes.idbStore.iterate(onItem, options);
+    this.notes.indexedDB.iterate(onItem, options);
   });
 
   it('should be able to do batch operations', function (done) {
@@ -508,8 +504,8 @@ describe('Working with a Backbone Collection', function () {
       console.log('err', err);
     }
 
-    // this.notes.idbStore.saveAll(onSuccess, onError);
-    this.notes.idbStore.saveAll(onSuccess);
+    // this.notes.indexedDB.saveAll(onSuccess, onError);
+    this.notes.indexedDB.saveAll(onSuccess);
     done();
   });
 

@@ -1,7 +1,7 @@
 /**
  * @license
  * Backbone IndexedDB Adapter
- * Version 0.2.4
+ * Version 0.2.5
  * Copyright (c) 2013-2014 Vincent Mac
  *
  * Available under MIT license <https://raw.github.com/vincentmac/backbone-idb/master/LICENSE>
@@ -49,8 +49,8 @@
       // console.log('idb:ready this:', this);  // <IDBStore>
       // console.log('idb:ready that:', that);  // <IndexedDB>
       
-      // By default, make the Backbone.IndexedDB available through `parent.idbStore`
-      that.parent.idbStore = that;
+      // By default, make the Backbone.IndexedDB available through `parent.indexedDB`
+      // that.parent.indexedDB = that;
       // Fire ready event on parent model or collection
       that.parent.trigger('idb:ready', that);
     };
@@ -80,7 +80,7 @@
      *
      * @type String
      */
-    version: '0.2.4',
+    version: '0.2.5',
 
     /**
      * Add a new model to the store
