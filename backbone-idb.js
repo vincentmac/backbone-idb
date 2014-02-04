@@ -1,7 +1,7 @@
 /**
  * @license
  * Backbone IndexedDB Adapter
- * Version 0.2.5
+ * Version 0.2.6
  * Copyright (c) 2013-2014 Vincent Mac
  *
  * Available under MIT license <https://raw.github.com/vincentmac/backbone-idb/master/LICENSE>
@@ -80,7 +80,7 @@
      *
      * @type String
      */
-    version: '0.2.5',
+    version: '0.2.6',
 
     /**
      * Add a new model to the store
@@ -325,7 +325,7 @@
   // Reference original `Backbone.sync`
   Backbone.ajaxSync = Backbone.sync;
 
-  Backbone.getSyncMethod = function(model) {
+  Backbone.getIDBSyncMethod = function(model) {
     if(model.indexedDB || (model.collection && model.collection.indexedDB)) {
       return Backbone.idbSync;
     }
@@ -336,7 +336,7 @@
   // Override 'Backbone.sync' to default to idbSync,
   // the original 'Backbone.sync' is still available in 'Backbone.ajaxSync'
   Backbone.sync = function(method, model, options) {
-    return Backbone.getSyncMethod(model).apply(this, [method, model, options]);
+    return Backbone.getIDBSyncMethod(model).apply(this, [method, model, options]);
   };
 
   Backbone.IndexedDB.version = Backbone.IndexedDB.prototype.version;

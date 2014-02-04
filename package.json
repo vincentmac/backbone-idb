@@ -1,6 +1,6 @@
 {
   "name": "backbone-idb",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "description": "Backbone IndexedDB adapter with cross browser support via IDBWrapper",
   "license": "MIT",
   "author": {
