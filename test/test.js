@@ -21,7 +21,7 @@ describe('Check for global dependencies', function () {
       (window.indexedDB).should.be.ok;
       done();
     }
-    
+
   });
 
   it('should have Backbone as a global', function (done) {
