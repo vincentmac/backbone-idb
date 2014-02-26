@@ -6,7 +6,7 @@ Backbone [IndexedDB](https://developer.mozilla.org/en-US/docs/IndexedDB) adapter
 <!-- [![browser support](http://ci.testling.com/vincentmac/backbone-idb.png)](http://ci.testling.com/vincentmac/backbone-idb) -->
 
 <!-- [![Build Status](https://travis-ci.org/vincentmac/backbone-idb.png)](https://travis-ci.org/vincentmac/backbone-idb) -->
-
+[![Build Status](https://drone.io/github.com/vincentmac/backbone-idb/status.png)](https://drone.io/github.com/vincentmac/backbone-idb/latest)
 
 [IDBWrapper tutorial Part 1 - Basic CRUD](http://jensarps.de/2011/11/25/working-with-idbwrapper-part-1/)
 

@@ -101,8 +101,8 @@ module.exports = function(grunt) {
   grunt.registerTask('test', [
     'jshint',
     'connect:test',
-    'mocha',
-    'watch'
+    'mocha'
+    // 'watch'
   ]);
 
   grunt.registerTask('build', [
