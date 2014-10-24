@@ -69,7 +69,7 @@
     options = _.defaults(options || {}, defaults);
     this.dbName = options.storePrefix + options.storeName;
     this.store = new IDBStore(options);
-
+    this.keyPath = options.keyPath;
   };
 
   // _.extend(Backbone.IndexedDB.prototype, {
@@ -80,7 +80,7 @@
      *
      * @type String
      */
-    version: '0.2.6',
+    version: '0.2.7',
 
     /**
      * Add a new model to the store
@@ -91,7 +91,12 @@
      * @param {Function} [options.error] - overridable error callback
      */
     create: function(model, options) {
-      this.store.put(model.attributes, options.success, options.error);
+      var data = model.attributes;
+      var that = this;
+      this.store.put(data, function(insertedId) {
+        data[that.keyPath] = insertedId;
+        options.success(data)
+      }, options.error);
 
     },
 
