@@ -19,9 +19,9 @@
       return factory(_ || global._, Backbone || global.Backbone, IDBStore || global.IDBStore, 'AMD');
     });
   } else {
-    factory(_, Backbone, IDBStore, 'window');
+    factory(_, Backbone, IDBStore, global);
   }
-}(this, function(_, Backbone, IDBStore, method) {
+}(this, function(_, Backbone, IDBStore, global) {
   'use strict';
 
   // // Generate four random hex digits.
@@ -69,7 +69,7 @@
     options = _.defaults(options || {}, defaults);
     this.dbName = options.storePrefix + options.storeName;
     this.store = new IDBStore(options);
-
+    this.keyPath = options.keyPath;
   };
 
   // _.extend(Backbone.IndexedDB.prototype, {
@@ -80,7 +80,7 @@
      *
      * @type String
      */
-    version: '0.2.6',
+    version: '0.2.8',
 
     /**
      * Add a new model to the store
@@ -91,7 +91,12 @@
      * @param {Function} [options.error] - overridable error callback
      */
     create: function(model, options) {
-      this.store.put(model.attributes, options.success, options.error);
+      var data = model.attributes;
+      var that = this;
+      this.store.put(data, function(insertedId) {
+        data[that.keyPath] = insertedId;
+        options.success(data)
+      }, options.error);
 
     },
 
