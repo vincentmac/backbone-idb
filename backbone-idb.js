@@ -19,9 +19,9 @@
       return factory(_ || global._, Backbone || global.Backbone, IDBStore || global.IDBStore, 'AMD');
     });
   } else {
-    factory(_, Backbone, IDBStore, 'window');
+    factory(_, Backbone, IDBStore, global);
   }
-}(this, function(_, Backbone, IDBStore, method) {
+}(this, function(_, Backbone, IDBStore, global) {
   'use strict';
 
   // // Generate four random hex digits.
@@ -80,7 +80,7 @@
      *
      * @type String
      */
-    version: '0.2.7',
+    version: '0.2.8',
 
     /**
      * Add a new model to the store
