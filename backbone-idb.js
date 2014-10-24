@@ -1,7 +1,7 @@
 /**
  * @license
  * Backbone IndexedDB Adapter
- * Version 0.2.6
+ * Version 0.2.8
  * Copyright (c) 2013-2014 Vincent Mac
  *
  * Available under MIT license <https://raw.github.com/vincentmac/backbone-idb/master/LICENSE>
@@ -11,7 +11,7 @@
 ;(function (global, factory) {
   'use strict';
   if (typeof exports === 'object' && typeof require === 'function') {
-    // CommonJS Module - Register as a CommonJS Module 
+    // CommonJS Module - Register as a CommonJS Module
     module.exports = factory(require('underscore'), require('backbone'), require('idb-wrapper'), 'CommonJS');
   } else if (typeof define === 'function' && define.amd) {
     // AMD - Register as an anonymous module
@@ -48,7 +48,7 @@
     var defaultReadyHandler = function () {
       // console.log('idb:ready this:', this);  // <IDBStore>
       // console.log('idb:ready that:', that);  // <IndexedDB>
-      
+
       // By default, make the Backbone.IndexedDB available through `parent.indexedDB`
       // that.parent.indexedDB = that;
       // Fire ready event on parent model or collection
@@ -87,7 +87,7 @@
      *
      * @param {Backbone.Model} model - Backbone model to add to store
      * @param {Object} options - sync options created by Backbone
-     * @param {Function} [options.success] - overridable success callback 
+     * @param {Function} [options.success] - overridable success callback
      * @param {Function} [options.error] - overridable error callback
      */
     create: function(model, options) {
@@ -105,7 +105,7 @@
      *
      * @param {Backbone.Model} model - Backbone model to update and save to store
      * @param {Object} options - sync options created by Backbone
-     * @param {Function} [options.success] - overridable success callback 
+     * @param {Function} [options.success] - overridable success callback
      * @param {Function} [options.error] - overridable error callback
      */
     update: function(model, options) {
@@ -117,7 +117,7 @@
      *
      * @param {Backbone.Model} model - Backbone model to get from store
      * @param {Object} options - sync options created by Backbone
-     * @param {Function} [options.success] - overridable success callback 
+     * @param {Function} [options.success] - overridable success callback
      * @param {Function} [options.error] - overridable error callback
      */
     read: function(model, options) {
@@ -128,7 +128,7 @@
      * Retrieve a collection from the store
      *
      * @param {Object} options - sync options created by Backbone
-     * @param {Function} [options.success] - overridable success callback 
+     * @param {Function} [options.success] - overridable success callback
      * @param {Function} [options.error] - overridable error callback
      */
     getAll: function(options) {
@@ -140,7 +140,7 @@
      *
      * @param {Backbone.Model} model - Backbone model to delete from store
      * @param {Object} options - sync options created by Backbone
-     * @param {Function} [options.success] - overridable success callback 
+     * @param {Function} [options.success] - overridable success callback
      * @param {Function} [options.error] - overridable error callback
      */
     destroy: function(model, options) {
@@ -205,7 +205,7 @@
     /**
      * Perform a batch operation to save all models in the current collection to indexedDB.
      *
-     * @param {Function} [onSuccess] - success callback 
+     * @param {Function} [onSuccess] - success callback
      * @param {Function} [onError] - error callback
      */
     saveAll: function(onSuccess, onError) {
@@ -221,7 +221,7 @@
      *
      * @param {Array} dataArray - Array of objects containing the operation to run and
      *  the model (for put operations).
-     * @param {Function} [onSuccess] - success callback 
+     * @param {Function} [onSuccess] - success callback
      * @param {Function} [onError] - error callback
      */
     batch: function(dataArray, onSuccess, onError) {
@@ -232,11 +232,11 @@
     },
 
     /**
-     * Perform a batch put operation to save models to indexedDB. This is a 
+     * Perform a batch put operation to save models to indexedDB. This is a
      * proxy to the idbstore `putBatch` method
      *
      * @param {Array} dataArray - Array of models (in JSON) to store
-     * @param {Function} [onSuccess] - success callback 
+     * @param {Function} [onSuccess] - success callback
      * @param {Function} [onError] - error callback
      */
     putBatch: function(dataArray, onSuccess, onError) {
@@ -247,11 +247,11 @@
     },
 
     /**
-     * Perform a batch operation to remove models from indexedDB. This is a 
+     * Perform a batch operation to remove models from indexedDB. This is a
      * proxy to the idbstore `removeBtch` method
      *
      * @param {Array} keyArray - keyArray An array of keys to remove
-     * @param {Function} [onSuccess] - success callback 
+     * @param {Function} [onSuccess] - success callback
      * @param {Function} [onError] - error callback
      */
     removeBatch: function(keyArray, onSuccess, onError) {
@@ -264,7 +264,7 @@
     /**
      * Clears all content from the current indexedDB for this collection/model
      *
-     * @param {Function} [onSuccess] - success callback 
+     * @param {Function} [onSuccess] - success callback
      * @param {Function} [onError] - error callback
      */
     clear: function(onSuccess, onError) {
